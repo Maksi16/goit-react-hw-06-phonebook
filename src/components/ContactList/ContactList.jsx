@@ -14,9 +14,6 @@ export const ContactList = () => {
     contact.name.toLocaleLowerCase().includes(normalized)
   );
 
-  // const contactsDelete = ({ id }) => {
-  //   dispatch(deleteContact(id));
-  // };
   return (
     <List>
       {contacts.map(({ id, name, number }) => (
