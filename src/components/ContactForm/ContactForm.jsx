@@ -1,32 +1,40 @@
 import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types';
 import { Label, Form, Input, Button } from './ContactForm.styled';
-//import { useState } from 'react';
+import { getContacts } from 'redux/selectors';
+import { useSelector, useDispatch } from 'react-redux';
+import { addContact } from '../../redux/contactsSlice';
 
-export const ContactForm = ({ onSubmit }) => {
-  const [name, setName] = useState('');
+export const ContactForm = () => {
+  const idName = nanoid(5);
+  const idNumber = nanoid(5);
+  const contacts = useSelector(getContacts);
+  const [nameForm, setNameForm] = useState('');
   const [number, setNumber] = useState('');
+  const dispatch = useDispatch();
 
   const handlerChangName = e => {
-    setName(e.currentTarget.value);
+    setNameForm(e.currentTarget.value);
   };
   const handlerChangNumber = e => {
     setNumber(e.currentTarget.value);
   };
-
   const handlerSubmit = e => {
     e.preventDefault();
-    onSubmit({ name, number });
+    if (
+      contacts.find(
+        contact => contact.name.toLowerCase() === nameForm.toLowerCase()
+      )
+    ) {
+      return alert(`${nameForm} is already in contacts.`);
+    }
+    dispatch(addContact({ nameForm, number }));
     reset();
   };
   const reset = () => {
-    setName('');
+    setNameForm('');
     setNumber('');
   };
-
-  const idName = nanoid(5);
-  const idNumber = nanoid(5);
 
   return (
     <div>
@@ -38,7 +46,7 @@ export const ContactForm = ({ onSubmit }) => {
             type="text"
             name="name"
             onChange={handlerChangName}
-            value={name}
+            value={nameForm}
             placeholder="Enter a name"
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
@@ -63,8 +71,4 @@ export const ContactForm = ({ onSubmit }) => {
       </Form>
     </div>
   );
-};
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
