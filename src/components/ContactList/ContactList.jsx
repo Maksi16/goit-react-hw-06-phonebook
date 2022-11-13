@@ -14,9 +14,9 @@ export const ContactList = () => {
     contact.name.toLocaleLowerCase().includes(normalized)
   );
 
-  const contactsDelete = ({ id }) => {
-    dispatch(deleteContact(id));
-  };
+  // const contactsDelete = ({ id }) => {
+  //   dispatch(deleteContact(id));
+  // };
   return (
     <List>
       {contacts.map(({ id, name, number }) => (
@@ -24,7 +24,7 @@ export const ContactList = () => {
           <p>
             {name} : {number}
           </p>
-          <Button type="button" onClick={contactsDelete}>
+          <Button type="button" onClick={() => dispatch(deleteContact(id))}>
             Delete
           </Button>
         </Item>
